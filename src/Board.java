@@ -6,11 +6,23 @@ public class Board {
     private int count;
 
 
-    public Board(){
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                stringBuilder.append(board[i][j]);
+            }
+            stringBuilder.append("\n");
+        }
+        return stringBuilder.toString();
+    }
+
+    public Board() {
         count = 1;
         board = new char[8][8];
-        for (int i = 0; i < 8; i ++) {
-            for (int j = 0; j < 8; j ++) {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
                 if ((i + j) % 2 == 0) {
                     board[i][j] = 'B';
                 } else {
@@ -37,19 +49,34 @@ public class Board {
     }
 
     public boolean jump(int prevRow, int prevCol, int row, int col) {
-        if (boundCheck(prevRow, prevCol) && boundCheck(row, col)) {
-            if (accessCheck(prevRow, prevCol, row, col)) {
-                board[row][col] = board[][]
+        if (boundCheck(prevRow, prevCol) && boundCheck(row, col) && accessCheck(prevRow, prevCol, row, col)) {
+            char original = board[prevCol][prevRow];
+            if (prevCol == col) {
+                int start = Math.min(prevRow, row);
+                int end = Math.max(prevRow, row);
+                for (int i = start; i <= end; i++) {
+                    board[i][col] = ' ';
+                }
+                board[row][col] = original;
+            } else {
+                int start = Math.min(prevCol, col);
+                int end = Math.max(prevCol, col);
+                for (int i = start; i <= end; i++) {
+                    board[row][i] = ' ';
+                }
+                board[row][col] = original;
             }
-
         }
         return false;
     }
 
+    public ArrayList<Board> getSuccesors(){
+
+    }
 
 
     private boolean check(int row, int col) {
-        if (row == col && ((row == 0) || (row == 3) ||  (row == 4) || (row == 7))) {
+        if (row == col && ((row == 0) || (row == 3) || (row == 4) || (row == 7))) {
             return true;
         }
         return false;
@@ -60,7 +87,7 @@ public class Board {
             int sum = row + col;
             if ((sum == 1 && board[0][0] == ' ') ||
                     ((sum == 5 || sum == 7) && board[3][3] == ' ') ||
-                    ((sum == 7 || sum == 9) && board[5][5] == ' ') ||
+                    ((sum == 7 || sum == 9) && board[4][4] == ' ') ||
                     (sum == 13 && board[7][7] == ' ')) {
                 return true;
             }
@@ -76,31 +103,37 @@ public class Board {
     }
 
     private boolean accessCheck(int prevRow, int prevCol, int row, int col) {
-        if (prevCol == col && prevRow != row) {
+        if (board[prevRow][prevCol] == ' ' || board[row][col] != ' ') {
+            return false;
+        }
+
+        if (prevCol == col && prevRow != row && ((prevRow - row) % 2 == 0)) {
             int start = Math.min(prevRow, row);
             int end = Math.max(prevRow, row);
-            for (int i = start; i <= end; i ++) {
-
+            boolean flag = true;
+            for (int i = start + 1; i < end; i++) {
+                if ((flag && board[i][col] == ' ') || (!flag && board[i][col] != ' ')) {
+                    return false;
+                }
+                flag = !flag;
             }
+            return true;
+        } else if (prevRow == row && prevCol != col && (prevCol - col) % 2 == 0) {
+            int start = Math.min(prevCol, col);
+            int end = Math.max(prevCol, col);
+            boolean flag = true;
+            for (int i = start + 1; i < end; i++) {
+                if ((flag && board[row][i] == ' ') || (!flag && board[row][i] != ' ')) {
+                    return false;
+                }
+                flag = !flag;
+            }
+            return true;
+        } else {
+            return false;
         }
-    }
 
-    public char[][] getBoard() {
-        return board;
     }
-
-    public void setBoard(char[][] board) {
-        this.board = board;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
 
 
 }
