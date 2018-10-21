@@ -9,16 +9,15 @@ public class Agent {
     }
 
     private int[] getRoute() {
-
+        return null;
     }
 
     private int[] minmax(){
         int[] ret = new int[4];
-
-        return dfsHelper(curDepth, );
+        return null;
     }
 
     private int[] dfsHelper(int curDepth, boolean isMax) {
-        if (curDepth == depth || check())
+        return null;
     }
 }
