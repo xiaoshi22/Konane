@@ -19,7 +19,7 @@ public class Game {
         game.board.secondRemove(3, 4);
 
 
-        game.board.jump(4, 2, 4, 4);
+        // game.board.jump(4, 2, 4, 4);
 
 
 //        Board b = game.board.getSuccessors().get(0);
