@@ -36,7 +36,9 @@ public class Game {
         System.out.println(game.board);
         System.out.println("after: ");
         Board route = game.agent.minmaxDecision(game.board);
+        Board route2 = game.agent.alphaBetaSearch(game.board);
         System.out.println(route);
+        System.out.println(route2);
 
         //System.out.println(game.board);
     }
