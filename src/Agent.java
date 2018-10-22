@@ -2,8 +2,10 @@ import java.util.List;
 
 public class Agent {
     int limitDepth;
+    int cutOffs;
 
     public Agent(int limitDepth){
+        cutOffs = 0;
         this.limitDepth = limitDepth;
     }
 
@@ -13,8 +15,8 @@ public class Agent {
         Board ret = null;
         for(Board successor: successors){
             int tempUtility = minmaxValue(successor, 2);
-            System.out.println("minmax Utility: "+ tempUtility);
-            System.out.println(successor);
+//            System.out.println("minmax Utility: "+ tempUtility);
+//            System.out.println(successor);
             if (tempUtility > utility){
                 utility = tempUtility;
                 ret = successor;
@@ -25,14 +27,15 @@ public class Agent {
     }
 
 
-    public Board alphaBetaSearch(Board board) {
+    public Board alphaBetaSearch(Board board){
+        cutOffs = 0;
         List<Board> successors = board.getSuccessors();
         int utility = Integer.MIN_VALUE;
         Board ret = null;
         for(Board successor: successors){
             int tempUtility = alphaBetaValue(successor, 2, Integer.MIN_VALUE, Integer.MAX_VALUE);
-            System.out.println("ab Utility: "+ tempUtility);
-            System.out.println(successor);
+//            System.out.println("ab Utility: "+ tempUtility);
+//            System.out.println(successor);
             if (tempUtility > utility){
                 utility = tempUtility;
                 ret = successor;
@@ -42,11 +45,15 @@ public class Agent {
         return ret;
     }
 
+    public int getCutOffs() {
+        return cutOffs;
+    }
+
     private int minmaxValue(Board board, int curDepth){
-        System.out.println("here");
+        System.out.println("minmax here");
         List<Board> successors = board.getSuccessors();
         int utility = successors.size();
-        if(curDepth > limitDepth && utility != 0) {
+        if(curDepth <= limitDepth && utility != 0) {
             boolean isMax = (curDepth % 2 == 1);
             if (isMax) {
                 utility = Integer.MIN_VALUE;
@@ -66,6 +73,7 @@ public class Agent {
 
 
     private int alphaBetaValue(Board board, int curDepth, int alpha, int beta){
+        System.out.println("ab here");
         List<Board> successors = board.getSuccessors();
         int utility = successors.size();
         if(curDepth<= limitDepth && utility != 0) {
@@ -74,14 +82,20 @@ public class Agent {
                 utility = Integer.MIN_VALUE;
                 for (Board successor : successors) {
                     utility = Math.max(utility, alphaBetaValue(successor, curDepth + 1, alpha, beta));
-                    if (utility >= beta) return utility;
+                    if (utility >= beta) {
+                        cutOffs ++;
+                        return utility;
+                    }
                     beta = Math.max(alpha, utility);
                 }
             } else {
                 utility = Integer.MAX_VALUE;
                 for (Board successor : successors) {
                     utility = Math.min(utility, alphaBetaValue(successor, curDepth + 1, alpha, beta));
-                    if (utility <= alpha) return utility;
+                    if (utility <= alpha){
+                        cutOffs ++;
+                        return utility;
+                    }
                     beta = Math.min(beta, utility);
                 }
             }

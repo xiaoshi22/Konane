@@ -8,7 +8,7 @@ public class Game {
 
     public Game() {
         board = new Board();
-        agent = new Agent(2);
+        agent = new Agent(4);
 
     }
 
@@ -39,6 +39,7 @@ public class Game {
         Board route2 = game.agent.alphaBetaSearch(game.board);
         System.out.println(route);
         System.out.println(route2);
+        System.out.println("cutoffs: "+game.agent.getCutOffs());
 
         //System.out.println(game.board);
     }
