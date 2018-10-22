@@ -1,23 +1,51 @@
+import java.util.List;
+
 public class Agent {
-    private Board board;
-    int depth;
+    int limitDepth;
 
-
-    public Agent(Board board, int depth) {
-        this.board = board;
-        this.depth = depth;
+    public Agent(int limitDepth){
+        this.limitDepth = limitDepth;
     }
 
-    private int[] getRoute() {
-        return null;
+    public Board minmaxDecision(Board board) {
+        List<Board> successors = board.getSuccessors();
+        int utility = Integer.MIN_VALUE;
+        Board ret = null;
+        for(Board successor: successors){
+            int tempUtility = minmaxValue(successor, 2);
+//            System.out.println("Utility: "+ tempUtility);
+//            System.out.println(successor);
+            if (tempUtility > utility){
+                utility = tempUtility;
+                ret = successor;
+            }
+        }
+        return ret;
     }
 
-    private int[] minmax(){
-        int[] ret = new int[4];
-        return null;
-    }
-
-    private int[] dfsHelper(int curDepth, boolean isMax) {
-        return null;
+    private int minmaxValue(Board board, int curDepth){
+        List<Board> successors = board.getSuccessors();
+        int utility = successors.size();
+        if(curDepth<= limitDepth && utility != 0) {
+            boolean isMax = (curDepth % 2 == 1);
+            if (isMax) {
+                utility = Integer.MIN_VALUE;
+                for (Board successor : successors) {
+                    int tempUtility = minmaxValue(successor, curDepth + 1);
+                    if (tempUtility > utility) {
+                        utility = tempUtility;
+                    }
+                }
+            } else {
+                utility = Integer.MAX_VALUE;
+                for (Board successor : successors) {
+                    int tempUtility = minmaxValue(successor, curDepth + 1);
+                    if (tempUtility < utility) {
+                        utility = tempUtility;
+                    }
+                }
+            }
+        }
+        return utility;
     }
 }

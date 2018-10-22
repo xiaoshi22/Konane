@@ -82,7 +82,7 @@ public class Board {
         return false;
     }
 
-    public List<Board> getSuccesors(){
+    public List<Board> getSuccessors(){
         List<Board> ret = new ArrayList<>();
         char[][] tempBoard = twoDemArrayClone(board);
 
