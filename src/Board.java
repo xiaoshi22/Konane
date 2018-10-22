@@ -4,6 +4,7 @@ import java.lang.*;
 public class Board {
     private char[][] board;
     private int count;
+    private int[][] directions;
 
 
     @Override
@@ -19,6 +20,7 @@ public class Board {
     }
 
     public Board() {
+        directions = new int[][]{{0,2}, {2,0},{0,-2},{-2,0}};//right, down, left, up
         count = 1;
         board = new char[8][8];
         for (int i = 0; i < 8; i++) {
@@ -32,9 +34,16 @@ public class Board {
         }
     }
 
+    public Board(char[][] board, int count) {
+        this.board = board;
+        directions = new int[][]{{0,2}, {2,0},{0,-2},{-2,0}};//right, down, left, up
+        this.count = count;
+    }
+
     public boolean remove(int row, int col) {
         if (boundCheck(row, col) && check(row, col)) {
             board[row][col] = ' ';
+            count ++;
             return true;
         }
         return false;
@@ -43,6 +52,7 @@ public class Board {
     public boolean secondRemove(int row, int col) {
         if (boundCheck(row, col) && secondCheck(row, col)) {
             board[row][col] = ' ';
+            count++;
             return true;
         }
         return false;
@@ -50,6 +60,7 @@ public class Board {
 
     public boolean jump(int prevRow, int prevCol, int row, int col) {
         if (boundCheck(prevRow, prevCol) && boundCheck(row, col) && accessCheck(prevRow, prevCol, row, col)) {
+            count ++;
             char original = board[prevCol][prevRow];
             if (prevCol == col) {
                 int start = Math.min(prevRow, row);
@@ -66,12 +77,42 @@ public class Board {
                 }
                 board[row][col] = original;
             }
+            return true;
         }
         return false;
     }
 
-    public ArrayList<Board> getSuccesors(){
+    public List<Board> getSuccessors(){
+        List<Board> ret = new ArrayList<>();
+        char[][] tempBoard = twoDemArrayClone(board);
 
+        char identity = 'B';
+        if (count%2 ==0){
+            identity = 'W';
+        }
+
+        for (int i = 0; i< board.length; i++){
+            for (int j = 0; j < board[0].length; j++){
+                if (board[i][j] == identity){
+                    for(int[] direction : directions) {
+                        int tempX = i;
+                        int tempY = j;
+                        while (true){
+                            tempX += direction[0];
+                            tempY += direction[1]; 
+                            if (jump(tempX-direction[0],tempY-direction[1],tempX, tempY)) {
+                                ret.add(new Board(board, count));
+                                count --;
+                            } else {
+                                break;
+                            }
+                        }
+                        board = twoDemArrayClone(tempBoard);
+                    }
+                }
+            }
+        }
+        return ret;
     }
 
 
@@ -133,6 +174,14 @@ public class Board {
             return false;
         }
 
+    }
+
+    private char[][] twoDemArrayClone(char[][] a) {
+        char[][] b = new char[a.length][];
+        for (int i = 0; i < a.length; i++) {
+            b[i] = a[i].clone();
+        }
+        return b;
     }
 
 
