@@ -1,16 +1,30 @@
 import java.util.List;
 
 public class Game {
-
-
     Board board;
     Agent agent;
+    boolean AIIsPlaying;
 
     public Game() {
+        AIIsPlaying = true;
         board = new Board();
-        agent = new Agent(4);
+        agent = new Agent(4, true);
 
     }
+//
+//    public void oneTimeStep(){
+//        if (AIIsPlaying){
+//            if (board.getCount() == 1){
+//                board.remove(4, 4);
+//            } else {
+//
+//            }
+//        } else {
+//            if (board.getCount() == 2){
+//
+//            }
+//        }
+//    }
 
 
     public static void main(String[] args) {

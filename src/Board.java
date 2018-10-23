@@ -2,9 +2,19 @@ import java.util.*;
 import java.lang.*;
 
 public class Board {
-    private char[][] board;
     private int count;
     private int[][] directions;
+
+
+    public char[][] getBoard() {
+        return board;
+    }
+
+    private char[][] board;
+
+    public int getCount() {
+        return count;
+    }
 
 
     @Override

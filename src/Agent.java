@@ -3,45 +3,65 @@ import java.util.List;
 public class Agent {
     int limitDepth;
     int cutOffs;
+    int numOfEval;
+    boolean isMinmax;
 
-    public Agent(int limitDepth){
+    public Agent(int limitDepth, boolean isMinmax){
         cutOffs = 0;
         this.limitDepth = limitDepth;
+        this.isMinmax = isMinmax;
+    }
+
+    public Board findRoute(Board board){
+        if (isMinmax){
+            return minmaxDecision(board);
+        } else {
+            return alphaBetaSearch(board);
+        }
     }
 
     public Board minmaxDecision(Board board) {
+//        try {
+//            Thread.sleep(10000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
+
+
         List<Board> successors = board.getSuccessors();
+
         int utility = Integer.MIN_VALUE;
         Board ret = null;
         for(Board successor: successors){
             int tempUtility = minmaxValue(successor, 2);
-//            System.out.println("minmax Utility: "+ tempUtility);
-//            System.out.println(successor);
             if (tempUtility > utility){
                 utility = tempUtility;
                 ret = successor;
             }
         }
-        System.out.println("minmax utility: "+ utility);
         return ret;
     }
 
 
     public Board alphaBetaSearch(Board board){
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
         cutOffs = 0;
         List<Board> successors = board.getSuccessors();
         int utility = Integer.MIN_VALUE;
         Board ret = null;
         for(Board successor: successors){
             int tempUtility = alphaBetaValue(successor, 2, Integer.MIN_VALUE, Integer.MAX_VALUE);
-//            System.out.println("ab Utility: "+ tempUtility);
-//            System.out.println(successor);
             if (tempUtility > utility){
                 utility = tempUtility;
                 ret = successor;
             }
         }
-        System.out.println("ab utility: "+ utility);
         return ret;
     }
 
@@ -50,7 +70,6 @@ public class Agent {
     }
 
     private int minmaxValue(Board board, int curDepth){
-        System.out.println("minmax here");
         List<Board> successors = board.getSuccessors();
         int utility = successors.size();
         if(curDepth <= limitDepth && utility != 0) {
@@ -73,7 +92,6 @@ public class Agent {
 
 
     private int alphaBetaValue(Board board, int curDepth, int alpha, int beta){
-        System.out.println("ab here");
         List<Board> successors = board.getSuccessors();
         int utility = successors.size();
         if(curDepth<= limitDepth && utility != 0) {
