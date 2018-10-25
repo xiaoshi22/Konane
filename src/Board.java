@@ -2,9 +2,19 @@ import java.util.*;
 import java.lang.*;
 
 public class Board {
-    private char[][] board;
     private int count;
     private int[][] directions;
+
+
+    public char[][] getBoard() {
+        return board;
+    }
+
+    private char[][] board;
+
+    public int getCount() {
+        return count;
+    }
 
 
     @Override
@@ -61,22 +71,24 @@ public class Board {
     public boolean jump(int prevRow, int prevCol, int row, int col) {
         if (boundCheck(prevRow, prevCol) && boundCheck(row, col) && accessCheck(prevRow, prevCol, row, col)) {
             count ++;
-            char original = board[prevCol][prevRow];
+            char original = board[prevRow][prevCol];
+            if (original == ' ') {
+                System.out.println("null here!!!!");
+            }
             if (prevCol == col) {
                 int start = Math.min(prevRow, row);
                 int end = Math.max(prevRow, row);
                 for (int i = start; i <= end; i++) {
                     board[i][col] = ' ';
                 }
-                board[row][col] = original;
             } else {
                 int start = Math.min(prevCol, col);
                 int end = Math.max(prevCol, col);
                 for (int i = start; i <= end; i++) {
                     board[row][i] = ' ';
                 }
-                board[row][col] = original;
             }
+            board[row][col] = original;
             return true;
         }
         return false;
