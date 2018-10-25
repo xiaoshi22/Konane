@@ -2,14 +2,22 @@ import java.util.List;
 
 public class Agent {
     int limitDepth;
-    int cutOffs;
-    int numOfEval;
     boolean isMinmax;
 
+    int numOfEval;
+    int numOfBranches;
+    int cutOffs;
+
+
+
+
     public Agent(int limitDepth, boolean isMinmax){
-        cutOffs = 0;
         this.limitDepth = limitDepth;
         this.isMinmax = isMinmax;
+
+        numOfEval = 0;
+        numOfBranches = 0;
+        cutOffs = 0;
     }
 
     public Board findRoute(Board board){
@@ -26,8 +34,6 @@ public class Agent {
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
-
-
 
         List<Board> successors = board.getSuccessors();
 
@@ -50,7 +56,6 @@ public class Agent {
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
-
         cutOffs = 0;
         List<Board> successors = board.getSuccessors();
         int utility = Integer.MIN_VALUE;
@@ -120,4 +125,5 @@ public class Agent {
         }
         return utility;
     }
+
 }

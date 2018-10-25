@@ -16,7 +16,7 @@ public class GameGUI extends JFrame {
     ImageIcon nullIcon;
 
 
-    public GameGUI(int difficulty, boolean isMinmax) {
+    public GameGUI(int difficulty, boolean isMinmax, boolean isBlack) {
         AIIsPlaying = false;
         board = new Board();
         agent = new Agent(difficulty, isMinmax);
@@ -28,14 +28,13 @@ public class GameGUI extends JFrame {
         nullIcon = new ImageIcon("src/null.png");
 
 
-
         setLayout(new GridLayout(8, 8));
 
-        int count = 1;
-        for (int i = 0; i < grids.length; i++, count++) {
+
+        for (int i = 0; i < grids.length; i++) {
             for (int j = 0; j < grids.length; j++) {
                 grids[i][j] = new JButton();
-                if (count % 2 == 0) {
+                if ((i+j) % 2 == 1) {
                     grids[i][j].setIcon(whiteIcon);
                 } else {
                     grids[i][j].setIcon(blackIcon);
@@ -56,8 +55,11 @@ public class GameGUI extends JFrame {
                 });
                 add(grids[i][j]);
                 setVisible(true);
-                count++;
             }
+        }
+
+        if (!isBlack){
+            AIOneTimeStep();
         }
 
 
@@ -114,6 +116,7 @@ public class GameGUI extends JFrame {
 
 
     private void drawBoard() {
+        // System.out.println(board);
         char[][] curBoard = board.getBoard();
         for (int i = 0; i < grids.length; i++) {
             for (int j = 0; j < grids.length; j++) {
