@@ -48,11 +48,11 @@ public class Game {
 //        }
         System.out.println("before: ");
         System.out.println(game.board);
-        System.out.println("after: ");
-        Board route = game.agent.minmaxDecision(game.board);
-        Board route2 = game.agent.alphaBetaSearch(game.board);
-        System.out.println(route);
-        System.out.println(route2);
+//        System.out.println("after: ");
+//        Board route = game.agent.minmaxDecision(b);
+////        Board route2 = game.agent.alphaBetaSearch();
+//        System.out.println(route);
+//        System.out.println(route2);
         System.out.println("cutoffs: "+game.agent.getCutOffs());
 
         //System.out.println(game.board);
