@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 public class GameGUI extends JFrame {
-    JButton[][] grids = new JButton[8][8];
+    private JButton[][] grids = new JButton[8][8];
     Board board;
     Agent agent;
     boolean AIIsPlaying;
@@ -35,7 +35,7 @@ public class GameGUI extends JFrame {
         for (int i = 0; i < grids.length; i++) {
             for (int j = 0; j < grids.length; j++) {
                 grids[i][j] = new JButton();
-                if ((i+j) % 2 == 1) {
+                if ((i + j) % 2 == 1) {
                     grids[i][j].setIcon(whiteIcon);
                 } else {
                     grids[i][j].setIcon(blackIcon);
@@ -59,7 +59,7 @@ public class GameGUI extends JFrame {
             }
         }
 
-        if (!isBlack){
+        if (!isBlack) {
             AIOneTimeStep();
         }
 
@@ -67,30 +67,35 @@ public class GameGUI extends JFrame {
     }
 
     public void AIOneTimeStep() {
-        if(board.getCount()>2 && board.getSuccessors().size() <= 0){
-            int res = JOptionPane.showConfirmDialog(this, "You win! Play again? ","Restart",
+        if (board.getCount() > 2 && board.getSuccessors().size() <= 0) {
+            int res = JOptionPane.showConfirmDialog(this, "You win! Play again? ", "Restart",
                     JOptionPane.YES_NO_OPTION);
             restart(res);
             return;
         }
+        Timer timer = new Timer(2000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (board.getCount() == 1) {
+                    board.remove(4, 4);
+                } else if (board.getCount() == 2) {
+                    if (clickHistory[0] == 0) board.secondRemove(0, 1);
+                    else if (clickHistory[0] == 3) board.secondRemove(3, 4);
+                    else if (clickHistory[0] == 4) board.secondRemove(4, 5);
+                    else if (clickHistory[0] == 7) board.secondRemove(7, 6);
+                } else {
+                    Board route = agent.findRoute(board);
+                    board = route;
+                }
+                drawBoard();
+                AIIsPlaying = false;
 
 
-        if (board.getCount() == 1) {
-            board.remove(4, 4);
-        } else if (board.getCount() == 2) {
-            if (clickHistory[0] == 0) board.secondRemove(0, 1);
-            else if (clickHistory[0] == 3) board.secondRemove(3, 4);
-            else if (clickHistory[0] == 4) board.secondRemove(4, 5);
-            else if (clickHistory[0] == 7) board.secondRemove(7, 6);
-        } else {
-            Board route = agent.findRoute(board);
-            board = route;
-        }
-        drawBoard();
-        AIIsPlaying = false;
-
-
-        if(board.getCount()>2 && board.getSuccessors().size() <= 0){
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
+        if (board.getCount() > 2 && board.getSuccessors().size() <= 0) {
             int res = JOptionPane.showConfirmDialog(this, "AI wins! Try again?", "Restart",
                     JOptionPane.YES_NO_OPTION);
             restart(res);
@@ -135,8 +140,8 @@ public class GameGUI extends JFrame {
 
     }
 
-    private void restart(int toRestart){
-        if (toRestart == 0){
+    private void restart(int toRestart) {
+        if (toRestart == 0) {
             StartGUI startGUI = new StartGUI();
             startGUI.setTitle("Konane");
             startGUI.setLocation(getX(), getY());
