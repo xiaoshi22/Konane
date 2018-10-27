@@ -19,6 +19,7 @@ public class GameGUI extends JFrame {
     public GameGUI(int difficulty, boolean isMinmax, boolean isBlack) {
         AIIsPlaying = false;
         board = new Board();
+        // agent = new Agent(board, difficulty, isMinmax);
         agent = new Agent(difficulty, isMinmax);
         clickHistory = new int[2];
         Arrays.fill(clickHistory, -1);
