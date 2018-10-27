@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 public class GameGUI extends JFrame {
-    JButton[][] grids = new JButton[8][8];
+    private JButton[][] grids = new JButton[8][8];
     Board board;
     Agent agent;
     boolean AIIsPlaying;
