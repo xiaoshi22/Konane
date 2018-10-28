@@ -1,17 +1,15 @@
 import java.util.List;
 
 public class Agent {
+
     int limitDepth;
     boolean isMinmax;
-    // Board board;
-
     int numOfEval;
     int numOfBranches;
     int cutOffs;
     
 
     public Agent(int limitDepth, boolean isMinmax){
-        // this.board = board;
         this.limitDepth = limitDepth;
         this.isMinmax = isMinmax;
 
@@ -51,11 +49,6 @@ public class Agent {
 
 
     public Board alphaBetaSearch(Board board){
-//        try {
-//            Thread.sleep(5000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
         cutOffs = 0;
         List<Board> successors = board.getSuccessors();
         int heuristic = Integer.MIN_VALUE;
