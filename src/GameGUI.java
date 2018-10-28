@@ -73,7 +73,7 @@ public class GameGUI extends JFrame {
             restart(res);
             return;
         }
-        Timer timer = new Timer(2000, new ActionListener() {
+        Timer timer = new Timer(0, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (board.getCount() == 1) {
@@ -94,7 +94,8 @@ public class GameGUI extends JFrame {
             }
         });
         timer.setRepeats(false);
-        timer.start();
+        timer.restart();
+
         if (board.getCount() > 2 && board.getSuccessors().size() <= 0) {
             int res = JOptionPane.showConfirmDialog(this, "AI wins! Try again?", "Restart",
                     JOptionPane.YES_NO_OPTION);

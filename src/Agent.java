@@ -133,7 +133,7 @@ public class Agent {
     
     
     private int heuristicFunc(Board curBoard, int numOfSuccessors){
-        int ret = numOfSuccessors;
+        int ret = 0;//numOfSuccessors;
         char identity = 'B';
         char opponent = 'W';
         if (curBoard.getCount()%2 ==0){
