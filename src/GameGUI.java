@@ -67,40 +67,58 @@ public class GameGUI extends JFrame {
     }
 
     public void AIOneTimeStep() {
+        System.out.println("count: "+ board.getCount()+ "   succ size: "+ board.getSuccessors().size()+ "co:"+agent.getCutOffs());
         if (board.getCount() > 2 && board.getSuccessors().size() <= 0) {
-            int res = JOptionPane.showConfirmDialog(this, "You win! Play again? ", "Restart",
+            int res = JOptionPane.showConfirmDialog(this, agentData() + "You win! Play again? ", "Restart",
                     JOptionPane.YES_NO_OPTION);
             restart(res);
             return;
         }
-        Timer timer = new Timer(0, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (board.getCount() == 1) {
-                    board.remove(4, 4);
-                } else if (board.getCount() == 2) {
-                    if (clickHistory[0] == 0) board.secondRemove(0, 1);
-                    else if (clickHistory[0] == 3) board.secondRemove(3, 4);
-                    else if (clickHistory[0] == 4) board.secondRemove(4, 5);
-                    else if (clickHistory[0] == 7) board.secondRemove(7, 6);
-                } else {
-                    Board route = agent.findRoute(board);
-                    board = route;
-                }
-                drawBoard();
-                AIIsPlaying = false;
+//        Timer timer = new Timer(2000, new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                if (board.getCount() == 1) {
+//                    board.remove(4, 4);
+//                } else if (board.getCount() == 2) {
+//                    if (clickHistory[0] == 0) board.secondRemove(0, 1);
+//                    else if (clickHistory[0] == 3) board.secondRemove(3, 4);
+//                    else if (clickHistory[0] == 4) board.secondRemove(4, 5);
+//                    else if (clickHistory[0] == 7) board.secondRemove(7, 6);
+//                } else {
+//                    Board route = agent.findRoute(board);
+//                    board = route;
+//                }
+//                drawBoard();
+//                AIIsPlaying = false;
+//
+//
+//            }
+//        });
+//        timer.setRepeats(false);
+//        timer.restart();
 
 
-            }
-        });
-        timer.setRepeats(false);
-        timer.restart();
+        if (board.getCount() == 1) {
+            board.remove(4, 4);
+        } else if (board.getCount() == 2) {
+            if (clickHistory[0] == 0) board.secondRemove(0, 1);
+            else if (clickHistory[0] == 3) board.secondRemove(3, 4);
+            else if (clickHistory[0] == 4) board.secondRemove(4, 5);
+            else if (clickHistory[0] == 7) board.secondRemove(7, 6);
+        } else {
+            Board route = agent.findRoute(board);
+            board = route;
+        }
+        drawBoard();
+        AIIsPlaying = false;
 
         if (board.getCount() > 2 && board.getSuccessors().size() <= 0) {
-            int res = JOptionPane.showConfirmDialog(this, "AI wins! Try again?", "Restart",
+            int res = JOptionPane.showConfirmDialog(this, agentData()+"AI wins! Try again?", "Restart",
                     JOptionPane.YES_NO_OPTION);
             restart(res);
         }
+
+        System.out.println("here!!!");
     }
 
 
@@ -118,11 +136,23 @@ public class GameGUI extends JFrame {
         if (AIIsPlaying) {
             AIOneTimeStep();
         }
-        // System.out.println(board.getSuccessors());
+
+
     }
 
 
     private void drawBoard() {
+//        System.out.println("count: "+board.getCount());
+//        System.out.println(board);
+
+//
+//        for(Board b:board.getSuccessors()) {
+//            System.out.println("successors: ");
+//            System.out.println(b);
+//        }
+
+
+
         // System.out.println(board);
         char[][] curBoard = board.getBoard();
         for (int i = 0; i < grids.length; i++) {
@@ -156,5 +186,12 @@ public class GameGUI extends JFrame {
             dispose();
             System.exit(0);
         }
+    }
+
+    private String agentData(){
+        String ret = "The number of times a static evaluation was done: "+ agent.getNumOfEval()
+                + "\n The average branching factor: " + agent.getAverageBranches()
+                + "\n The number of cut offs that took place: "+ agent.getCutOffs() + "\n";
+        return ret;
     }
 }

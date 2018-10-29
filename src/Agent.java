@@ -6,6 +6,7 @@ public class Agent {
     boolean isMinmax;
     int numOfEval;
     int numOfBranches;
+    int numOfNodes;
     int cutOffs;
     
 
@@ -15,6 +16,7 @@ public class Agent {
 
         numOfEval = 0;
         numOfBranches = 0;
+        numOfNodes = 0;
         cutOffs = 0;
     }
 
@@ -27,17 +29,15 @@ public class Agent {
     }
 
     public Board minmaxDecision(Board board) {
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         List<Board> successors = board.getSuccessors();
 
         int heuristic = Integer.MIN_VALUE;
         Board ret = null;
+        numOfNodes++;
+
         for(Board successor: successors){
+            numOfBranches ++;
+
             int tempHeuristic = minmaxValue(successor, 2);
             if (tempHeuristic > heuristic){
                 heuristic = tempHeuristic;
@@ -49,11 +49,14 @@ public class Agent {
 
 
     public Board alphaBetaSearch(Board board){
-        cutOffs = 0;
         List<Board> successors = board.getSuccessors();
         int heuristic = Integer.MIN_VALUE;
         Board ret = null;
+        numOfNodes++;
+
         for(Board successor: successors){
+            numOfBranches ++;
+
             int tempHeuristic = alphaBetaValue(successor, 2, Integer.MIN_VALUE, Integer.MAX_VALUE);
             if (tempHeuristic > heuristic){
                 heuristic = tempHeuristic;
@@ -61,6 +64,17 @@ public class Agent {
             }
         }
         return ret;
+    }
+
+    public int getNumOfEval() {
+        return numOfEval;
+    }
+
+    public int getAverageBranches() {
+        if(numOfNodes == 0){
+            return 0;
+        }
+        return numOfBranches/numOfNodes;
     }
 
     public int getCutOffs() {
@@ -73,6 +87,9 @@ public class Agent {
         int numOfSuccessors = successors.size();
         int heuristic = numOfSuccessors;
         if(curDepth <= limitDepth && numOfSuccessors != 0) {
+            numOfNodes++;
+            numOfBranches += numOfSuccessors;
+
             boolean isMax = (curDepth % 2 == 1);
             heuristic = heuristicFunc(curBoard, numOfSuccessors);
             if (isMax) {
@@ -97,6 +114,10 @@ public class Agent {
         int numOfSuccessors = successors.size();
         int heuristic = numOfSuccessors;
         if(curDepth<= limitDepth && numOfSuccessors != 0) {
+
+            numOfNodes++;
+            numOfBranches += numOfSuccessors;
+
             boolean isMax = (curDepth % 2 == 1);
             heuristic = heuristicFunc(curBoard, numOfSuccessors);
             if (isMax) {
@@ -126,7 +147,9 @@ public class Agent {
     
     
     private int heuristicFunc(Board curBoard, int numOfSuccessors){
-        int ret = 0;//numOfSuccessors;
+        numOfEval++;
+
+        int ret = numOfSuccessors;
         char identity = 'B';
         char opponent = 'W';
         if (curBoard.getCount()%2 ==0){
