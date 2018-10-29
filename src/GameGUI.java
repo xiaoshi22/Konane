@@ -19,7 +19,6 @@ public class GameGUI extends JFrame {
     public GameGUI(int difficulty, boolean isMinmax, boolean isBlack) {
         AIIsPlaying = false;
         board = new Board();
-        // agent = new Agent(board, difficulty, isMinmax);
         agent = new Agent(difficulty, isMinmax);
         clickHistory = new int[2];
         Arrays.fill(clickHistory, -1);
@@ -67,36 +66,12 @@ public class GameGUI extends JFrame {
     }
 
     public void AIOneTimeStep() {
-        System.out.println("count: "+ board.getCount()+ "   succ size: "+ board.getSuccessors().size()+ "co:"+agent.getCutOffs());
         if (board.getCount() > 2 && board.getSuccessors().size() <= 0) {
             int res = JOptionPane.showConfirmDialog(this, agentData() + "You win! Play again? ", "Restart",
                     JOptionPane.YES_NO_OPTION);
             restart(res);
             return;
         }
-//        Timer timer = new Timer(2000, new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                if (board.getCount() == 1) {
-//                    board.remove(4, 4);
-//                } else if (board.getCount() == 2) {
-//                    if (clickHistory[0] == 0) board.secondRemove(0, 1);
-//                    else if (clickHistory[0] == 3) board.secondRemove(3, 4);
-//                    else if (clickHistory[0] == 4) board.secondRemove(4, 5);
-//                    else if (clickHistory[0] == 7) board.secondRemove(7, 6);
-//                } else {
-//                    Board route = agent.findRoute(board);
-//                    board = route;
-//                }
-//                drawBoard();
-//                AIIsPlaying = false;
-//
-//
-//            }
-//        });
-//        timer.setRepeats(false);
-//        timer.restart();
-
 
         if (board.getCount() == 1) {
             board.remove(4, 4);
@@ -109,16 +84,15 @@ public class GameGUI extends JFrame {
             Board route = agent.findRoute(board);
             board = route;
         }
+
         drawBoard();
-        AIIsPlaying = false;
+
 
         if (board.getCount() > 2 && board.getSuccessors().size() <= 0) {
             int res = JOptionPane.showConfirmDialog(this, agentData()+"AI wins! Try again?", "Restart",
                     JOptionPane.YES_NO_OPTION);
             restart(res);
         }
-
-        System.out.println("here!!!");
     }
 
 
@@ -134,6 +108,7 @@ public class GameGUI extends JFrame {
 
 
         if (AIIsPlaying) {
+            AIIsPlaying = false;
             AIOneTimeStep();
         }
 
@@ -142,18 +117,6 @@ public class GameGUI extends JFrame {
 
 
     private void drawBoard() {
-//        System.out.println("count: "+board.getCount());
-//        System.out.println(board);
-
-//
-//        for(Board b:board.getSuccessors()) {
-//            System.out.println("successors: ");
-//            System.out.println(b);
-//        }
-
-
-
-        // System.out.println(board);
         char[][] curBoard = board.getBoard();
         for (int i = 0; i < grids.length; i++) {
             for (int j = 0; j < grids.length; j++) {

@@ -13,7 +13,7 @@ public class StartGUI extends JFrame{
     public StartGUI() {
         setLayout(new GridBagLayout());
 
-        JLabel label = new JLabel("Konane");
+        JLabel label = new JLabel("Konane (A simple uer manual is included in the report) ");
         JLabel label1 = new JLabel("Difficulty");
         JLabel label2 = new JLabel("Applied Algorithm");
         JLabel label3 = new JLabel("Choose a color to play");
@@ -49,8 +49,9 @@ public class StartGUI extends JFrame{
 
         c.gridx = 0;
         c.gridy = 0;
+        c.gridwidth = 2;
         add(label, c);
-
+        c.gridwidth = 1;
         c.gridx = 0;
         c.gridy = 1;
         add(label1, c);
