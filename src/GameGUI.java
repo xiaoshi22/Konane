@@ -23,9 +23,9 @@ public class GameGUI extends JFrame {
         clickHistory = new int[2];
         Arrays.fill(clickHistory, -1);
         isFirstClick = true;
-        whiteIcon = new ImageIcon("src/white.png");
-        blackIcon = new ImageIcon("src/black.png");
-        nullIcon = new ImageIcon("src/null.png");
+        whiteIcon = new ImageIcon("./res/white.png");
+        blackIcon = new ImageIcon("res/black.png");
+        nullIcon = new ImageIcon("res/null.png");
 
 
         setLayout(new GridLayout(8, 8));
